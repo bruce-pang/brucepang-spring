@@ -5,6 +5,7 @@ import com.brucepang.myspring.annotation.ComponentScan;
 import com.brucepang.myspring.annotation.Scope;
 import com.brucepang.myspring.factory.config.BeanDefinition;
 
+import java.beans.Introspector;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -84,20 +85,24 @@ public class BrucePangApplicationContext {
                             beanDefinition.setType(clazz); // 保存加载到内存的Class对象信息
 
                             // 判断Component注解内容[别名]，为null就以类名首字母小写作为beanName
-                            String clazzOtherName = clazz.getAnnotation(Component.class).value(); // 获取类的别名
-                            if (clazzOtherName == null) {
-                                clazzOtherName = clazz.getSimpleName();// 获取类名
-                                clazzOtherName = clazzOtherName.substring(0, 1).toLowerCase() + clazzOtherName.substring(1);// 将类名首字母小写
+                            String beanName = clazz.getAnnotation(Component.class).value(); // 获取类的别名
+                            if (beanName == null || "".equals(beanName)) { // 判断别名是否为空
+                                beanName = clazz.getSimpleName();// 获取类名
+                                beanName = Introspector.decapitalize(beanName);// 将类名首字母小写
 
                             }
 
-                            // 判断Scope注解内容，然后创造对象
-                            Scope scopeAnnotation = clazz.getAnnotation(Scope.class);
-                            String value = scopeAnnotation.value();
-                            beanDefinition.setScope(value);
+                            // 判断Scope注解内容
+                            if (clazz.isAnnotationPresent(Scope.class)){ // 判断类是否有Scope注解
+                                Scope scopeAnnotation = clazz.getAnnotation(Scope.class);
+                                String value = scopeAnnotation.value();
+                                beanDefinition.setScope(value);
+                            } else {
+                                beanDefinition.setScope("singleton");
+                            }
 
                             //
-                            beanDefinitionMap.put(clazzOtherName, beanDefinition);// 将beanName和beanDefinition对象保存到map中
+                            beanDefinitionMap.put(beanName, beanDefinition);// 将beanName和beanDefinition对象保存到map中
 
                         }
                     } catch (ClassNotFoundException e) {

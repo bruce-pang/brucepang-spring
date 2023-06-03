@@ -7,12 +7,13 @@ import com.brucepang.myspring.annotation.Scope;
 /**
  * @author BrucePang
  */
-@Component("userService")
+//@Component("userService")
+@Component
 //@Scope("prototype")
 @Scope("singleton")
 public class UserService {
 
     public void test(){
-        System.out.println("test");
+        System.out.println("UserService test...");
     }
 }

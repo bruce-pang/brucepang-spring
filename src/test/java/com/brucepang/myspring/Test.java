@@ -15,7 +15,7 @@ public class Test {
         // UserService userService = (UserService) applicationContext.getBean("userService");
         System.out.println(applicationContext.getBean("userService"));
         System.out.println(applicationContext.getBean("userService"));
-        System.out.println(applicationContext.getBean("userService"));
+        System.out.println(applicationContext.getBean("orderService"));
         // 3、调用对象的方法
         //userService.test();
     }
