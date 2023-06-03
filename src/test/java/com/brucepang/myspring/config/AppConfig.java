@@ -5,6 +5,6 @@ import com.brucepang.myspring.annotation.ComponentScan;
 /**
  * @author BrucePang
  */
-@ComponentScan("com.brucepang.myspring.service")
+@ComponentScan("com.brucepang.myspring")
 public class AppConfig {
 }
